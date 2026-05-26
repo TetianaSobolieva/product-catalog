@@ -1,5 +1,4 @@
 # 📦 Product Catalog App
----
 A simple and responsive Product Catalog built with React + TypeScript.
 The app fetches products from a public API and provides search, filtering, sorting, favorites, and comparison features.
 
