@@ -1,73 +1,119 @@
-# React + TypeScript + Vite
+📦 Product Catalog App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple and responsive Product Catalog built with React + TypeScript.
+The app fetches products from a public API and provides search, filtering, sorting, favorites, and comparison features.
 
-Currently, two official plugins are available:
+🚀 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+(optional) Add deployed link here
+Example: https://your-app-link.com
 
-## React Compiler
+⚙️ Tech Stack
+React
+TypeScript
+Vite
+CSS (no UI frameworks)
+Native browser APIs (localStorage)
+📌 Features
+📦 Product Listing
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Fetches products from:
 
-## Expanding the ESLint configuration
+https://dummyjson.com/products?limit=30
+Displays product cards with:
+Image
+Title
+Brand
+Category
+Price
+Discount percentage (if available)
+Rating
+Stock status
+🔎 Search
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Search products by:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Title
+Brand
+Category
+🎛 Filters
+Filter by category
+Show only in-stock products
+Show only discounted products
+↕️ Sorting
+Price: low → high
+Price: high → low
+Rating: high → low
+Title: A → Z
+⭐ Favorites
+Add/remove products to favorites
+Favorites displayed in a separate section
+Stored in localStorage
+Persist after page reload
+⚖️ Compare Products
+Select up to 3 products
+Comparison table includes:
+Title
+Price
+Rating
+Stock
+Category
+Discount percentage
+Prevents selecting more than 3 items with warning message
+📱 UI / UX
+Responsive design:
+Grid layout on desktop
+Single column on mobile
+Clear visual states for:
+Favorites
+Compare selection
+Accessible controls (buttons, labels, keyboard support)
+🔄 State Handling
+Products stored as source of truth
+All filters/sorting are derived (not stored)
+Favorites and compare use product IDs
+Clean separation of UI and data logic using custom hooks
+▶️ How to Run the Project
+1. Clone repository
+git clone https://github.com/TetianaSobolieva/product-catalog.git
+2. Navigate to project
+cd product-catalog
+3. Install dependencies
+npm install
+4. Run development server
+npm run dev
+5. Build for production
+npm run build
+❗ What was skipped
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Due to time constraints:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+No pagination (only 30 products are loaded)
+No backend caching layer
+No advanced animations library
+⚠️ Known issues
+Compare limit uses alert() instead of custom modal
+No debounce implemented for search input
+No persistent storage for compare list (optional feature not implemented)
+💡 What I would improve with more time
+Add debounce to search input
+Replace alerts with UI modal system
+Persist compare list in localStorage
+Add unit tests (React Testing Library)
+Improve accessibility (ARIA roles, better focus management)
+Add skeleton loaders instead of simple spinner
+Add pagination or infinite scroll
+🧠 Architecture Notes
+Custom hook useProducts handles data fetching
+UI state is separated from derived state
+Filtering and sorting are computed via useMemo
+Favorites and compare are stored as ID arrays (normalized state)
+👨‍💻 Author Notes
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+This project was built as a frontend test task to demonstrate:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+React component structure
+State management without external libraries
+Derived data patterns
+Clean and scalable architecture
+Basic UX and responsiveness principles
