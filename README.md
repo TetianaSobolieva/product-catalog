@@ -6,7 +6,7 @@ The app fetches products from a public API and provides search, filtering, sorti
 🚀 Live Demo
 
 (optional) Add deployed link here
-Example: [https://your-app-link.com](https://product-catalog-eta-gold.vercel.app/)
+Example: [product-catalog](https://product-catalog-eta-gold.vercel.app/)
 
 ⚙️ Tech Stack
 React
