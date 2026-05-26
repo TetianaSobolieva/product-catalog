@@ -9,7 +9,8 @@ export function getCategories(products: Product[]): string[] {
 
 export function filterProducts(
   products: Product[],
-  { search, category, inStockOnly, discountedOnly }: FilterState,
+  search: string,
+  { category, inStockOnly, discountedOnly }: FilterState,
 ): Product[] {
   const q = search.trim().toLowerCase();
 
@@ -19,12 +20,19 @@ export function filterProducts(
         `${p.title} ${p.brand ?? ""} ${p.category}`.toLowerCase();
       if (!haystack.includes(q)) return false;
     }
+
     if (category && p.category !== category) return false;
+
     if (inStockOnly && p.stock <= 0) return false;
-    if (discountedOnly && !(p.discountPercentage ?? 0 > 0)) return false;
+
+    const discount = p.discountPercentage ?? 0;
+    if (discountedOnly && discount <= 0) return false;
+
     return true;
   });
 }
+
+
 
 export function sortProducts(products: Product[], sortKey: SortKey): Product[] {
   const arr = [...products];

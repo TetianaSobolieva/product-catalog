@@ -39,7 +39,7 @@ function App() {
 );
 
   const visibleProducts = useMemo(() => {
-    const filtered = filterProducts(products, { search, ...filters });
+    const filtered = filterProducts(products, search, filters);
     return sortProducts(filtered, filters.sortKey);
   }, [products, search, filters]);
 
