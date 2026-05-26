@@ -32,7 +32,7 @@ Search products by:
 *Brand
 *Category
 
-🎛 Filters
+# 🎛 Filters
 Filter by category
 Show only in-stock products
 Show only discounted products
