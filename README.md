@@ -4,9 +4,7 @@ A simple and responsive Product Catalog built with React + TypeScript.
 The app fetches products from a public API and provides search, filtering, sorting, favorites, and comparison features.
 
 🚀 Live Demo
-
-(optional) Add deployed link here
-Example: [product-catalog](https://product-catalog-eta-gold.vercel.app/)
+[product-catalog](https://product-catalog-eta-gold.vercel.app/)
 
 ⚙️ Tech Stack
 React
@@ -98,7 +96,6 @@ No persistent storage for compare list (optional feature not implemented)
 💡 What I would improve with more time
 Add debounce to search input
 Replace alerts with UI modal system
-Persist compare list in localStorage
 Add unit tests (React Testing Library)
 Improve accessibility (ARIA roles, better focus management)
 Add skeleton loaders instead of simple spinner
