@@ -1,9 +1,8 @@
-import "./App.css";
 import { useProducts } from "./hooks/useProducts";
-import styles from "./App.module.css";
 import type { Tab } from "./types/tab";
 import { useState } from "react";
 import { ProductCard } from "./components/ProductCard";
+import styles from "./App.module.css";
 
 function App() {
   const { products, loading, error } = useProducts();
@@ -11,34 +10,41 @@ function App() {
   const [activeTab, setActiveTab] = useState<Tab>("catalog");
 
   return (
-    <div>
+    <div className={styles.app}>
       <header className={styles.header}>
-        <div>
-          <span>◈</span>
-          <span>Catalogr</span>
+        <div className={styles.headerInner}>
+          <div className={styles.logo}>
+            <span className={styles.logoMark}>◈</span>
+            <span className={styles.logoText}>Catalogr</span>
+          </div>
+          <nav className={styles.tabs} aria-label="App sections">
+            {(["catalog", "favorites", "compare"] as Tab[]).map((tab) => (
+              <button
+                key={tab}
+                className={`${styles.tab} ${activeTab === tab ? styles.tabActive : ""}`}
+                onClick={() => setActiveTab(tab)}
+                aria-current={activeTab === tab ? "page" : undefined}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                <span>0</span>
+              </button>
+            ))}
+          </nav>
         </div>
-        <nav>
-          {(["catalog", "favorites", "compare"] as Tab[]).map((tab) => (
-            <button key={tab} onClick={() => setActiveTab(tab)}>
-              {tab} 
-              <span>0</span>
-            </button>
-          ))}
-        </nav>
       </header>
       <main className={styles.main}>
         {activeTab === "catalog" && (
           <>
-            {loading && (<p>Loading products…</p>)}
+            {loading && <p>Loading products…</p>}
             {error && !loading && (
-            <div>
+              <div>
                 <p>Failed to load products</p>
                 <p>{error}</p>
-            </div>
+              </div>
             )}
             {!loading && !error && products.length === 0 && <p>No products.</p>}
             {!loading && !error && products.length > 0 && (
-              <div>
+              <div className={styles.grid} aria-label="Product catalog">
                 {products.map((product) => (
                   <div key={product.id}>
                     <ProductCard product={product} />
@@ -48,12 +54,8 @@ function App() {
             )}
           </>
         )}
-        {activeTab === "favorites" && (
-          <FavoritesTab />
-        )}
-        {activeTab === "compare" && (
-          <CompareTab />
-        )}
+        {activeTab === "favorites" && <FavoritesSection />}
+        {activeTab === "compare" && <CompareTable />}
       </main>
     </div>
   );
