@@ -1,12 +1,15 @@
 import { useProducts } from "./hooks/useProducts";
 import type { Tab } from "./types/tab";
 import { useCallback, useMemo, useState } from "react";
-import { ProductCard } from "./components/ProductCard";
 import styles from "./App.module.css";
 import type { FilterState } from "./types/filterState";
 import SearchBar from "./components/SearchBar";
 import { filterProducts, getCategories, sortProducts } from "./utils/products";
 import Filters from "./components/Filters";
+import ProductCard from "./components/ProductCard";
+import { useLocalStorage } from "./utils/useLocalStorage";
+
+const MAX_COMPARE = 3;
 
 const INITIAL_FILTERS: FilterState = {
   category: "",
@@ -16,17 +19,25 @@ const INITIAL_FILTERS: FilterState = {
 };
 
 function App() {
-  const { products, loading, error } = useProducts();
+    const { products, loading, error } = useProducts();
 
-  const [activeTab, setActiveTab] = useState<Tab>("catalog");
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
+  const [favoriteIds, setFavoriteIds] = useLocalStorage<number[]>(
+    "favorites",
+    [],
+  );
+  const [compareIds, setCompareIds] = useLocalStorage<number[]>("compare", []);
+  const [toast, setToast] = useState("");
+  const [activeTab, setActiveTab] = useState<Tab>("catalog");
+  // console.log("products:", products.length);
+  // console.log("favorites filtered:", favoriteIds.length);
+  // console.log("ids:", favoriteIds);
 
   const categories = useMemo(() => getCategories(products), [products]);
 
   const visibleProducts = useMemo(() => {
     const filtered = filterProducts(products, { search, ...filters });
-
     return sortProducts(filtered, filters.sortKey);
   }, [products, search, filters]);
 
@@ -41,6 +52,31 @@ function App() {
     setSearch("");
     setFilters(INITIAL_FILTERS);
   }, []);
+
+  const handleToggleFavorite = useCallback(
+    (id: number) => {
+      setFavoriteIds((prev) =>
+        prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+      );
+    },
+    [setFavoriteIds],
+  );
+
+  const handleToggleCompare = useCallback(
+    (id: number) => {
+      setCompareIds((prev) => {
+        if (prev.includes(id)) return prev.filter((x) => x !== id);
+        if (prev.length >= MAX_COMPARE) {
+          setToast(`You can compare up to ${MAX_COMPARE} products at a time.`);
+          return prev;
+        }
+        return [...prev, id];
+      });
+    },
+    [setCompareIds],
+  );
+
+
 
   return (
     <div className={styles.app}>
@@ -88,9 +124,16 @@ function App() {
             {!loading && !error && products.length === 0 && <p>No products.</p>}
             {!loading && !error && products.length > 0 && (
               <div className={styles.grid} aria-label="Product catalog">
-                {products.map((product) => (
+                {visibleProducts.map((product) => (
                   <div key={product.id}>
-                    <ProductCard product={product} />
+                    <ProductCard
+                      product={product}
+                      isFavorite={favoriteIds.includes(product.id)}
+                      isCompared={compareIds.includes(product.id)}
+                      compareCount={compareIds.length}
+                      onToggleFavorite={handleToggleFavorite}
+                      onToggleCompare={handleToggleCompare}
+                    />
                   </div>
                 ))}
               </div>
