@@ -1,21 +1,16 @@
-import React from "react";
-import styles from "./SearchBar.module.css";
+import styles from './SearchBar.module.css';
 
-type Props = {
+interface Props {
   value: string;
   onChange: (value: string) => void;
-};
+}
 
-export const SearchBar: React.FC<Props> = ({ value, onChange }) => {
+export default function SearchBar({ value, onChange }: Props) {
   return (
-    <div>
-      <label htmlFor="product-search" className={styles.label}>
-        Search products
-      </label>
+    <div className={styles.wrap}>
+      <label htmlFor="product-search" className={styles.label}>Search products</label>
       <div className={styles.inputWrap}>
-        <span className={styles.icon} aria-hidden="true">
-          ⌕
-        </span>
+        <span className={styles.icon} aria-hidden="true">⌕</span>
         <input
           id="product-search"
           type="search"
@@ -28,7 +23,7 @@ export const SearchBar: React.FC<Props> = ({ value, onChange }) => {
         {value && (
           <button
             className={styles.clear}
-            onClick={() => onChange("")}
+            onClick={() => onChange('')}
             aria-label="Clear search"
           >
             ✕
@@ -37,4 +32,4 @@ export const SearchBar: React.FC<Props> = ({ value, onChange }) => {
       </div>
     </div>
   );
-};
+}
