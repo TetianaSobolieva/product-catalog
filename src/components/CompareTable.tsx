@@ -1,4 +1,4 @@
-import type { Product } from '../types/product';
+import type { Product } from '../types';
 import { formatPrice } from '../utils/products';
 import styles from './CompareTable.module.css';
 

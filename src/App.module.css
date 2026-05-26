@@ -24,7 +24,6 @@
   height: 60px;
 }
 
-
 .logo {
   display: flex;
   align-items: center;
@@ -88,6 +87,21 @@
   box-shadow: 0 1px 4px var(--shadow);
 }
 
+.tabBadge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.tabBadgeHeart { background: var(--accent-heart); }
+.tabBadgeCompare { background: var(--accent); }
+
 .main {
   max-width: 1280px;
   margin: 0 auto;
@@ -97,9 +111,89 @@
   gap: 20px;
 }
 
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 18px;
   align-items: stretch;
+}
+
+.stateBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 80px 24px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.stateIcon {
+  font-size: 2.5rem;
+  color: var(--border);
+  display: block;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.stateBtn {
+  padding: 9px 20px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.15s;
+  margin-top: 4px;
+}
+
+.stateBtn:hover {
+  background: var(--btn-hover-bg);
+  color: var(--text);
+}
+
+.stateBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.errorText {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--red);
+  margin: 0;
+}
+
+.errorDetail {
+  font-size: 0.82rem;
+  margin: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 600px) {
+  .headerInner { padding: 0 14px; }
+  .main { padding: 16px 14px 48px; }
+  .grid { grid-template-columns: 1fr; }
+  .logoText { font-size: 1rem; }
+  .tab { padding: 6px 10px; font-size: 0.78rem; }
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import type { Product } from "../types/product";
 import { fetchProducts } from "../api/products";
+import type { Product } from "../types/product";
 
 export function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -8,22 +8,34 @@ export function useProducts() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
+
     async function load() {
       try {
         setLoading(true);
         setError(null);
 
         const products = await fetchProducts();
-        setProducts(products);
-      } catch {
-        setError("Failed to load products");
+
+        if (!cancelled) {
+          setProducts(products);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'Failed to load products');
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     }
 
     load();
 
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return { products, loading, error };

@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 import { useProducts } from "./hooks/useProducts";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 import { getCategories, filterProducts, sortProducts } from "./utils/products";
 import type { FilterState } from "./types/filterState";
 import type { Tab } from "./types/tab";
@@ -8,9 +9,8 @@ import Filters from "./components/Filters";
 import ProductCard from "./components/ProductCard";
 import FavoritesSection from "./components/FavoritesSection";
 import CompareTable from "./components/CompareTable";
-import styles from "./App.module.css";
-import { useLocalStorage } from "./utils/useLocalStorage";
 import Toast from "./components/Toast";
+import styles from "./App.module.css";
 
 const MAX_COMPARE = 3;
 

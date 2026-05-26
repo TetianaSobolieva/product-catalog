@@ -1,6 +1,5 @@
 import type { Review } from "./review";
 
-
 export type Product = {
   id: number;
   title: string;
