@@ -3,11 +3,13 @@ import type { Tab } from "./types/tab";
 import { useState } from "react";
 import { ProductCard } from "./components/ProductCard";
 import styles from "./App.module.css";
+import { SearchBar } from "./components/SearchBar";
 
 function App() {
   const { products, loading, error } = useProducts();
 
   const [activeTab, setActiveTab] = useState<Tab>("catalog");
+  const [search, setSearch] = useState("");
 
   return (
     <div className={styles.app}>
@@ -34,7 +36,9 @@ function App() {
       </header>
       <main className={styles.main}>
         {activeTab === "catalog" && (
-          <>
+          <><div className={styles.controls}>
+            <SearchBar value={search} onChange={setSearch} />
+          </div>
             {loading && <p>Loading products…</p>}
             {error && !loading && (
               <div>
