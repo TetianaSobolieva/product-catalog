@@ -33,6 +33,11 @@ function App() {
 
   const categories = useMemo(() => getCategories(products), [products]);
 
+  const favorites = useMemo(
+  () => products.filter((p) => favoriteIds.includes(p.id)),
+  [products, favoriteIds],
+);
+
   const visibleProducts = useMemo(() => {
     const filtered = filterProducts(products, { search, ...filters });
     return sortProducts(filtered, filters.sortKey);
@@ -80,6 +85,8 @@ function App() {
     [setCompareIds],
   );
 
+  console.log(favorites);
+
   return (
     <div className={styles.app}>
       <header className={styles.header}>
@@ -97,7 +104,7 @@ function App() {
                 aria-current={activeTab === tab ? 'page' : undefined}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                {tab === 'favorites' && favoriteIds.length > 0 && (
+                {tab === 'favorites' && favorites.length > 0 && (
                   <span className={`${styles.tabBadge} ${styles.tabBadgeHeart}`}>
                     {favorites.length}
                   </span>
@@ -173,8 +180,7 @@ function App() {
 
         {activeTab === 'favorites' && (
           <FavoritesSection
-            products={products}
-            favoriteIds={favoriteIds}
+            favorites={favorites}
             compareIds={compareIds}
             compareCount={compareIds.length}
             onToggleFavorite={handleToggleFavorite}

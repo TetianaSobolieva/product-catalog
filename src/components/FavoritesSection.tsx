@@ -3,8 +3,7 @@ import styles from './FavoritesSection.module.css';
 import type { Product } from '../types/product';
 
 interface Props {
-  products: Product[];
-  favoriteIds: number[];
+  favorites: Product[];
   compareIds: number[];
   compareCount: number;
   onToggleFavorite: (id: number) => void;
@@ -12,16 +11,13 @@ interface Props {
 }
 
 export default function FavoritesSection({
-  products,
-  favoriteIds,
+  favorites,
   compareIds,
   compareCount,
   onToggleFavorite,
   onToggleCompare,
 }: Props) {
-  const favorites = products.filter((p) => favoriteIds.includes(p.id));
-
-  if (favoriteIds.length === 0) {
+  if (favorites.length === 0) {
     return (
       <section className={styles.section} aria-label="Favorites">
         <h2 className={styles.heading}>Favorites</h2>
@@ -29,6 +25,7 @@ export default function FavoritesSection({
       </section>
     );
   }
+ console.log('Rendering FavoritesSection with favorites:', favorites);
 
   return (
     <section className={styles.section} aria-label="Favorites">
