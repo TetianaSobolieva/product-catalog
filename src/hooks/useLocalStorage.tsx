@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 function readStorage<T>(key: string, fallback: T): T {
   try {
     const item = localStorage.getItem(key);
-    return item ? JSON.parse(item) : fallback;
+    return item ? (JSON.parse(item) as T) : fallback;
   } catch {
     return fallback;
   }
@@ -17,21 +17,18 @@ function writeStorage<T>(key: string, value: T): void {
   }
 }
 
-export function useLocalStorage<T>(
-  key: string,
-  initialValue: T,
-): [T, (value: T | ((prev: T) => T)) => void] {
-  const [storedValue, setStoredValue] = useState<T>(() =>
-    readStorage(key, initialValue),
-  );
+type SetValue<T> = (value: T | ((prev: T) => T)) => void;
 
-  const setValue = (value: SetValue<T>) =>
-    setStoredValue((prev) => {
-      const next = value instanceof Function ? value(prev) : value;
+export function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T>] {
+  const [storedValue, setStoredValue] = useState<T>(() => readStorage(key, initialValue));
 
-      writeStorage(key, next);
-      return next;
-    });
+  const setValue: SetValue<T> = (value) => {
+    const next = typeof value === 'function'
+      ? (value as (prev: T) => T)(storedValue)
+      : value;
+    setStoredValue(next);
+    writeStorage(key, next);
+  };
 
   return [storedValue, setValue];
 }

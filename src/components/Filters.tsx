@@ -1,4 +1,5 @@
 import type { FilterState } from "../types/filterState";
+import type { SortKey } from "../types/sortKey";
 import styles from "./Filters.module.css";
 
 interface Props {
