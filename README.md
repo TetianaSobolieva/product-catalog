@@ -26,10 +26,9 @@ The app fetches products from a public API and provides search, filtering, sorti
 ## 📌 Features
 
 ### 📦 Product Listing
-
-- Fetches products from:
+Fetches products from:
 - https://dummyjson.com/products?limit=30
-- Displays product cards with:
+Displays product cards with:
 - Image
 - Title
 - Brand
@@ -169,7 +168,7 @@ cd product-catalog
 npm install
 npm run dev
 
-Build
+## Build
 npm run build
 
  ## ❗ Known Limitations
