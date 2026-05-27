@@ -7,7 +7,7 @@ The app fetches products from a public API and provides search, filtering, sorti
 
 ## 🚀 Live Demo
 
-👉 https://product-catalog (replace with your Vercel link)
+👉 [DEMO(https://tetianasobolieva.github.io/product-catalog/#/)
 
 ---
 
