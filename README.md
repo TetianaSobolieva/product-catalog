@@ -7,7 +7,7 @@ The app fetches products from a public API and provides search, filtering, sorti
 
 ## 🚀 Live Demo
 
-👉 [DEMO(https://tetianasobolieva.github.io/product-catalog/#/)
+👉 [DEMO](https://tetianasobolieva.github.io/product-catalog/#/)
 
 ---
 
