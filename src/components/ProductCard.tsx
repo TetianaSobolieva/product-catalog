@@ -1,6 +1,7 @@
 import type { Product } from '../types/product';
 import { formatPrice } from '../utils/products';
 import styles from './ProductCard.module.css';
+import { useProductContext } from "../context/useProductContext";
 
 const MAX_COMPARE = 3;
 
@@ -8,7 +9,6 @@ interface Props {
   product: Product;
   isFavorite: boolean;
   isCompared: boolean;
-  compareCount: number;
   onToggleFavorite: (id: number) => void;
   onToggleCompare: (id: number) => void;
 }
@@ -17,11 +17,13 @@ export default function ProductCard({
   product,
   isFavorite,
   isCompared,
-  compareCount,
   onToggleFavorite,
   onToggleCompare,
 }: Props) {
   const { id, title, brand, category, price, discountPercentage, rating, stock, thumbnail } = product;
+  const { compareIds } = useProductContext();
+  const compareCount = compareIds.length;
+  
   const inStock = stock > 0;
   const hasDiscount = (discountPercentage ?? 0) > 0;
   const compareDisabled = !isCompared && compareCount >= MAX_COMPARE;

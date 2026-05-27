@@ -6,6 +6,7 @@ export default function FavoritesSection() {
   const {
     favorites,
     compareIds,
+    compareCount,
     toggleFavorite,
     toggleCompare,
   } = useProductContext();
@@ -37,6 +38,7 @@ export default function FavoritesSection() {
             product={product}
             isFavorite={true}
             isCompared={compareIds.includes(product.id)}
+            compareCount={compareCount}
             onToggleFavorite={toggleFavorite}
             onToggleCompare={toggleCompare}
           />
