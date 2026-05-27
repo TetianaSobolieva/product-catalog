@@ -151,7 +151,6 @@ function App() {
                           product={product}
                           isFavorite={favoriteIds.includes(product.id)}
                           isCompared={compareIds.includes(product.id)}
-                          compareCount={compareIds.length}
                           onToggleFavorite={toggleFavorite}
                           onToggleCompare={toggleCompare}
                         />
