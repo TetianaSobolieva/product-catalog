@@ -32,12 +32,10 @@ function App() {
 
     compareIds,
     toggleCompare,
-    removeCompare,
 
     toast,
     setToast,
 
-    products,
   } = useProductContext();
 
   return (
