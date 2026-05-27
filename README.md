@@ -1,120 +1,204 @@
-📦 Product Catalog App
+# 📦 Product Catalog App
 
-A simple and responsive Product Catalog built with React + TypeScript.
-The app fetches products from a public API and provides search, filtering, sorting, favorites, and comparison features.
+A responsive Product Catalog built with **React + TypeScript + React Router + Context API**.  
+The app fetches products from a public API and provides search, filtering, sorting, favorites, and product comparison features.
 
-🚀 Live Demo
+---
 
-(optional) Add deployed link here
-Example: https://your-app-link.com
+## 🚀 Live Demo
 
-⚙️ Tech Stack
-React
-TypeScript
-Vite
-CSS (no UI frameworks)
-Native browser APIs (localStorage)
-📌 Features
-📦 Product Listing
+👉 https://product-catalog (replace with your Vercel link)
 
-Fetches products from:
+---
 
-https://dummyjson.com/products?limit=30
-Displays product cards with:
-Image
-Title
-Brand
-Category
-Price
-Discount percentage (if available)
-Rating
-Stock status
-🔎 Search
+## ⚙️ Tech Stack
 
-# 🔎 Search
+- React
+- TypeScript
+- Vite
+- React Router DOM
+- Context API (global state management)
+- CSS Modules (no UI frameworks)
+- Native browser APIs (localStorage)
+
+---
+
+## 📌 Features
+
+### 📦 Product Listing
+
+- Fetches products from:
+- https://dummyjson.com/products?limit=30
+- Displays product cards with:
+- Image
+- Title
+- Brand
+- Category
+- Price
+- Discount percentage
+- Rating
+- Stock status
+
+---
+
+## 🔎 Search
+
 Search products by:
-*Title
-*Brand
-*Category
 
-Title
-Brand
-Category
-🎛 Filters
-Filter by category
-Show only in-stock products
-Show only discounted products
-↕️ Sorting
-Price: low → high
-Price: high → low
-Rating: high → low
-Title: A → Z
-⭐ Favorites
-Add/remove products to favorites
-Favorites displayed in a separate section
-Stored in localStorage
-Persist after page reload
-⚖️ Compare Products
-Select up to 3 products
-Comparison table includes:
-Title
-Price
-Rating
-Stock
-Category
-Discount percentage
-Prevents selecting more than 3 items with warning message
-📱 UI / UX
-Responsive design:
-Grid layout on desktop
-Single column on mobile
-Clear visual states for:
-Favorites
-Compare selection
-Accessible controls (buttons, labels, keyboard support)
-🔄 State Handling
-Products stored as source of truth
-All filters/sorting are derived (not stored)
-Favorites and compare use product IDs
-Clean separation of UI and data logic using custom hooks
-▶️ How to Run the Project
-1. Clone repository
+- Title
+- Brand
+- Category
+
+---
+
+## 🎛 Filters
+
+- Filter by category
+- Show only in-stock products
+- Show only discounted products
+
+---
+
+## ↕️ Sorting
+
+- Price: low → high
+- Price: high → low
+- Rating: high → low
+- Title: A → Z
+
+---
+
+## 🧭 Routing (React Router)
+
+The app has 3 main pages:
+
+| Route | Page |
+|------|------|
+| `/` | Product catalog |
+| `/favorites` | Saved products |
+| `/compare` | Product comparison |
+
+- Unknown routes redirect to `/`
+- Navigation uses `NavLink` with active styles
+
+---
+
+## 🧠 State Management (Context API)
+
+All global state is handled via `ProductContext`.
+
+### Stored in context:
+
+- Products (API data)
+- Search query
+- Filters
+- Favorites (localStorage)
+- Compare list (localStorage)
+- Toast notifications
+
+### Derived state:
+
+- Filtered & sorted products
+- Categories list
+- Favorites list
+- Compare products
+
+### Benefits:
+
+- No prop drilling
+- Centralized logic
+- Cleaner page components
+
+---
+
+## ⭐ Favorites
+
+- Add/remove products to favorites
+- Stored in `localStorage`
+- Persisted after reload
+- Available at `/favorites`
+
+---
+
+## ⚖️ Compare Products
+
+- Compare up to **3 products**
+- Includes:
+- Price
+- Rating
+- Stock
+- Category
+- Discount
+- Prevents selecting more than 3 items
+- Shows toast warning
+- Available at `/compare`
+
+---
+
+## 📱 UI / UX
+
+- Responsive design:
+- Grid layout (desktop)
+- Single column (mobile)
+- UI states:
+- Loading
+- Empty state
+- Error state
+- Fully keyboard accessible:
+- Buttons
+- Focus styles
+- ARIA labels
+
+---
+
+## 🔄 Architecture Overview
+API layer → useProducts
+State layer → ProductContext
+Storage layer → useLocalStorage
+Logic layer → utils/
+UI layer → components/
+Routing → React Router pages
+
+---
+
+## ▶️ How to Run
+
+```bash
 git clone https://github.com/TetianaSobolieva/product-catalog.git
 cd product-catalog
 npm install
 npm run dev
+
 Build
 npm run build
-❗ What was skipped
 
-Due to time constraints:
-
-No pagination (only 30 products are loaded)
-No backend caching layer
-No advanced animations library
-⚠️ Known issues
-Compare limit uses alert() instead of custom modal
-No debounce implemented for search input
-No persistent storage for compare list (optional feature not implemented)
-💡 What I would improve with more time
-Add debounce to search input
-Replace alerts with UI modal system
-Persist compare list in localStorage
+ ## ❗ Known Limitations
+No pagination (30 products only)
+No backend caching
+Search has no debounce
+Compare is not persisted after refresh
+## 💡 Future Improvements
+Add debounce to search
+Replace toast with modal system
 Add unit tests (React Testing Library)
-Improve accessibility (ARIA roles, better focus management)
-Add skeleton loaders instead of simple spinner
-Add pagination or infinite scroll
-🧠 Architecture Notes
-Custom hook useProducts handles data fetching
-UI state is separated from derived state
-Filtering and sorting are computed via useMemo
-Favorites and compare are stored as ID arrays (normalized state)
-👨‍💻 Author Notes
+Improve accessibility (focus trap, ARIA improvements)
+Add skeleton loaders
+Add pagination / infinite scroll
+## 🧠 Architecture Notes
+React Router for page structure
+Context API replaces prop drilling
+useMemo used for derived state
+Favorites/compare stored as ID arrays
+Clear separation of:
+API logic
+UI components
+State management
+## 👨‍💻 Author
 
-This project was built as a frontend test task to demonstrate:
+Built as a frontend portfolio project to demonstrate:
 
-React component structure
-State management without external libraries
-Derived data patterns
-Clean and scalable architecture
-Basic UX and responsiveness principles
+React + TypeScript architecture
+Context API state management
+React Router navigation
+Scalable component structure
+Real-world UI patterns
