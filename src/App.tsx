@@ -1,91 +1,44 @@
-import { useState, useMemo, useCallback } from 'react';
-import { useProducts } from './hooks/useProducts';
-import { useLocalStorage } from './hooks/useLocalStorage';
-import { getCategories, filterProducts, sortProducts } from './utils/products';
-import SearchBar from './components/SearchBar';
-import Filters from './components/Filters';
-import ProductCard from './components/ProductCard';
-import FavoritesSection from './components/FavoritesSection';
-import CompareTable from './components/CompareTable';
-import Toast from './components/Toast';
-import styles from './App.module.css';
-import type { FilterState } from './types/filterState';
+import { Routes, Route, NavLink, Navigate } from "react-router-dom";
 
-const MAX_COMPARE = 3;
+import { useProductContext } from "./context/useProductContext";
 
-const INITIAL_FILTERS: FilterState = {
-  category: '',
-  inStockOnly: false,
-  discountedOnly: false,
-  sortKey: 'default',
-};
+import SearchBar from "./components/SearchBar";
+import Filters from "./components/Filters";
+import ProductCard from "./components/ProductCard";
+import FavoritesSection from "./components/FavoritesSection";
+import CompareTable from "./components/CompareTable";
+import Toast from "./components/Toast";
 
-type Tab = 'catalog' | 'favorites' | 'compare';
+import styles from "./App.module.css";
 
 function App() {
-  const { products, loading, error } = useProducts();
-  const [search, setSearch] = useState('');
-  const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
-  const [favoriteIds, setFavoriteIds] = useLocalStorage<number[]>('favorites', []);
-  const [compareIds, setCompareIds] = useLocalStorage<number[]>('compare', []);
-  const [toast, setToast] = useState('');
-  const [activeTab, setActiveTab] = useState<Tab>('catalog');
+  const {
+    search,
+    setSearch,
 
-  const categories = useMemo(() => getCategories(products), [products]);
+    filters,
+    handleFilterChange,
+    resetFilters,
 
-  const favorites = useMemo(
-  () => products.filter((p) => favoriteIds.includes(p.id)),
-  [products, favoriteIds],
-);
+    categories,
+    visibleProducts,
 
-  const visibleProducts = useMemo(() => {
-    const filtered = filterProducts(products, search, filters);
-    return sortProducts(filtered, filters.sortKey);
-  }, [products, search, filters]);
+    loading,
+    error,
 
-  const handleFilterChange = useCallback(
-    <K extends keyof FilterState>(key: K, value: FilterState[K]) => {
-      setFilters((prev) => ({ ...prev, [key]: value }));
-    },
-    [],
-  );
+    favorites,
+    favoriteIds,
+    toggleFavorite,
 
-  const handleResetFilters = useCallback(() => {
-    setSearch('');
-    setFilters(INITIAL_FILTERS);
-  }, []);
+    compareIds,
+    toggleCompare,
+    removeCompare,
 
-  const handleToggleFavorite = useCallback(
-    (id: number) => {
-      setFavoriteIds((prev) =>
-        prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
-      );
-    },
-    [setFavoriteIds],
-  );
+    toast,
+    setToast,
 
-  const handleToggleCompare = useCallback(
-    (id: number) => {
-      setCompareIds((prev) => {
-        if (prev.includes(id)) return prev.filter((x) => x !== id);
-        if (prev.length >= MAX_COMPARE) {
-          setToast(`You can compare up to ${MAX_COMPARE} products at a time.`);
-          return prev;
-        }
-        return [...prev, id];
-      });
-    },
-    [setCompareIds],
-  );
-
-  const handleRemoveCompare = useCallback(
-    (id: number) => {
-      setCompareIds((prev) => prev.filter((x) => x !== id));
-    },
-    [setCompareIds],
-  );
-
-  console.log(favorites);
+    products,
+  } = useProductContext();
 
   return (
     <div className={styles.app}>
@@ -95,109 +48,132 @@ function App() {
             <span className={styles.logoMark}>◈</span>
             <span className={styles.logoText}>Catalogr</span>
           </div>
+
           <nav className={styles.tabs} aria-label="App sections">
-            {(['catalog', 'favorites', 'compare'] as Tab[]).map((tab) => (
-              <button
-                key={tab}
-                className={`${styles.tab} ${activeTab === tab ? styles.tabActive : ''}`}
-                onClick={() => setActiveTab(tab)}
-                aria-current={activeTab === tab ? 'page' : undefined}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                {tab === 'favorites' && favorites.length > 0 && (
-                  <span className={`${styles.tabBadge} ${styles.tabBadgeHeart}`}>
-                    {favorites.length}
-                  </span>
-                )}
-                {tab === 'compare' && compareIds.length > 0 && (
-                  <span className={`${styles.tabBadge} ${styles.tabBadgeCompare}`}>
-                    {compareIds.length}
-                  </span>
-                )}
-              </button>
-            ))}
+            <NavLink
+              to="/"
+              end
+              className={({ isActive }) =>
+                isActive ? `${styles.tab} ${styles.tabActive}` : styles.tab
+              }
+            >
+              Catalog
+            </NavLink>
+
+            <NavLink
+              to="/favorites"
+              className={({ isActive }) =>
+                isActive ? `${styles.tab} ${styles.tabActive}` : styles.tab
+              }
+            >
+              Favorites
+              {favorites.length > 0 && (
+                <span className={`${styles.tabBadge} ${styles.tabBadgeHeart}`}>
+                  {favorites.length}
+                </span>
+              )}
+            </NavLink>
+
+            <NavLink
+              to="/compare"
+              className={({ isActive }) =>
+                isActive ? `${styles.tab} ${styles.tabActive}` : styles.tab
+              }
+            >
+              Compare
+              {compareIds.length > 0 && (
+                <span
+                  className={`${styles.tabBadge} ${styles.tabBadgeCompare}`}
+                >
+                  {compareIds.length}
+                </span>
+              )}
+            </NavLink>
           </nav>
         </div>
       </header>
 
       <main className={styles.main}>
-        {activeTab === 'catalog' && (
-          <>
-            <div className={styles.controls}>
-              <SearchBar value={search} onChange={setSearch} />
-              <Filters
-                categories={categories}
-                filters={filters}
-                onFilterChange={handleFilterChange}
-                onReset={handleResetFilters}
-                resultCount={visibleProducts.length}
-              />
-            </div>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <div className={styles.controls}>
+                  <SearchBar value={search} onChange={setSearch} />
 
-            {loading && (
-              <div className={styles.stateBox} role="status" aria-live="polite">
-                <div className={styles.spinner} aria-hidden="true" />
-                <p>Loading products…</p>
-              </div>
-            )}
+                  <Filters
+                    categories={categories}
+                    filters={filters}
+                    onFilterChange={handleFilterChange}
+                    onReset={resetFilters}
+                    resultCount={visibleProducts.length}
+                  />
+                </div>
 
-            {error && !loading && (
-              <div className={styles.stateBox} role="alert">
-                <span className={styles.stateIcon}>⚠</span>
-                <p className={styles.errorText}>Failed to load products</p>
-                <p className={styles.errorDetail}>{error}</p>
-              </div>
-            )}
-
-            {!loading && !error && visibleProducts.length === 0 && (
-              <div className={styles.stateBox} role="status">
-                <span className={styles.stateIcon}>◎</span>
-                <p>No products match your filters.</p>
-                <button className={styles.stateBtn} onClick={handleResetFilters}>
-                  Reset filters
-                </button>
-              </div>
-            )}
-
-            {!loading && !error && visibleProducts.length > 0 && (
-              <div className={styles.grid} aria-label="Product catalog">
-                {visibleProducts.map((product, i) => (
-                  <div key={product.id} style={{ animationDelay: `${Math.min(i * 0.04, 0.6)}s` }}>
-                    <ProductCard
-                      product={product}
-                      isFavorite={favoriteIds.includes(product.id)}
-                      isCompared={compareIds.includes(product.id)}
-                      compareCount={compareIds.length}
-                      onToggleFavorite={handleToggleFavorite}
-                      onToggleCompare={handleToggleCompare}
-                    />
+                {loading && (
+                  <div className={styles.stateBox} role="status">
+                    <div className={styles.spinner} />
+                    <p>Loading products…</p>
                   </div>
-                ))}
-              </div>
-            )}
-          </>
-        )}
+                )}
 
-        {activeTab === 'favorites' && (
-          <FavoritesSection
-            favorites={favorites}
-            compareIds={compareIds}
-            compareCount={compareIds.length}
-            onToggleFavorite={handleToggleFavorite}
-            onToggleCompare={handleToggleCompare}
-          />
-        )}
+                {error && !loading && (
+                  <div className={styles.stateBox} role="alert">
+                    <span className={styles.stateIcon}>⚠</span>
 
-        {activeTab === 'compare' && (
-          <CompareTable
-            products={products}
-            compareIds={compareIds}
-            onRemove={handleRemoveCompare}
+                    <p className={styles.errorText}>Failed to load products</p>
+
+                    <p className={styles.errorDetail}>{error}</p>
+                  </div>
+                )}
+
+                {!loading && !error && visibleProducts.length === 0 && (
+                  <div className={styles.stateBox}>
+                    <span className={styles.stateIcon}>◎</span>
+
+                    <p>No products match your filters.</p>
+
+                    <button className={styles.stateBtn} onClick={resetFilters}>
+                      Reset filters
+                    </button>
+                  </div>
+                )}
+
+                {!loading && !error && visibleProducts.length > 0 && (
+                  <div className={styles.grid}>
+                    {visibleProducts.map((product, i) => (
+                      <div
+                        key={product.id}
+                        style={{
+                          animationDelay: `${Math.min(i * 0.04, 0.6)}s`,
+                        }}
+                      >
+                        <ProductCard
+                          product={product}
+                          isFavorite={favoriteIds.includes(product.id)}
+                          isCompared={compareIds.includes(product.id)}
+                          compareCount={compareIds.length}
+                          onToggleFavorite={toggleFavorite}
+                          onToggleCompare={toggleCompare}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            }
           />
-        )}
+
+          <Route path="/favorites" element={<FavoritesSection />} />
+
+          <Route path="/compare" element={<CompareTable />} />
+
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </main>
 
-      <Toast message={toast} onDismiss={() => setToast('')} />
+      <Toast message={toast} onDismiss={() => setToast("")} />
     </div>
   );
 }

@@ -59,15 +59,23 @@
   border: none;
   border-radius: 7px;
   background: transparent;
+
   color: var(--text-muted);
+  text-decoration: none;
+
   font-size: 0.85rem;
   font-weight: 600;
+  font-family: var(--font-body);
+  font: inherit;
+
   cursor: pointer;
+
   transition: all 0.15s ease;
+
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: var(--font-body);
+
   white-space: nowrap;
 }
 
